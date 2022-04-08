@@ -27,7 +27,7 @@ describe('App e2e', () => {
   describe('Registration', () => {
     it('should register', () => {
       const user: AuthDto = {
-        email: 'ganesh@sabbar.com', password: 'Ganesh123'
+        email: 'ganesh@sabbar.com', password: 'Ganesh123', fullName: 'Ganesh Kumar'
       }
       return request(app.getHttpServer())
         .post('/auth/register')
@@ -37,7 +37,7 @@ describe('App e2e', () => {
 
     it('should not register', () => {
       const user: AuthDto = {
-        email: 'ganesh@sabbar.com', password: 'Ganesh123'
+        email: 'ganesh@sabbar.com', password: 'Ganesh123', fullName: 'Ganesh Kumar'
       }
 
       return request(app.getHttpServer())
@@ -50,7 +50,7 @@ describe('App e2e', () => {
   describe('Login', () => {
     it('should login', () => {
       const user: AuthDto = {
-        email: 'ganesh@sabbar.com', password: 'Ganesh123'
+        email: 'ganesh@sabbar.com', password: 'Ganesh123', fullName: 'Ganesh Kumar'
       }
 
       return request(app.getHttpServer())
@@ -64,7 +64,7 @@ describe('App e2e', () => {
 
     it('should throw exception for email validation', () => {
       const userWithoutEmail: AuthDto = {
-        email: '', password: 'Ganesh123'
+        email: '', password: 'Ganesh123', fullName: 'Ganesh Kumar'
       }
 
       return request(app.getHttpServer())
@@ -81,11 +81,30 @@ describe('App e2e', () => {
         .set({ 'Authorization': 'Bearer ' + access_token })
         .expect(HttpStatus.OK)
     })
-  
+
     it('should throw unauthorized exception', () => {
       return request(app.getHttpServer())
         .get('/users/me')
         .expect(HttpStatus.UNAUTHORIZED)
+    })
+  })
+
+  describe('get all users', () => {
+    it('should list all users with OK status', () => {
+      return request(app.getHttpServer())
+        .get('/users/')
+        .set({ 'Authorization': 'Bearer ' + access_token })
+        .expect(HttpStatus.OK)
+    })
+  })
+
+  describe('update user name', () => {
+    it('should update user full name with OK status', () => {
+      return request(app.getHttpServer())
+        .put('/users/update-profile')
+        .set({ 'Authorization': 'Bearer ' + access_token })
+        .send({ email: 'ganesh@sabbar.com', fullName: 'G Kumar Kirthiv' })
+        .expect(HttpStatus.OK)
     })
   })
 })
