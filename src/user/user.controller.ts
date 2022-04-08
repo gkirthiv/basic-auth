@@ -19,13 +19,15 @@ export class UserController {
 
     @Put('update-profile')
     @ApiOperation({ summary: 'Update User Profile' })
-    @ApiResponse({ status: 201, description: 'Created' })
-    updateProfile(@Body() dto: UserDto) {
+    @ApiResponse({ status: 200, description: 'OK' })
+    updateProfile(@Body() dto: UserDto, @GetUser() user: Auth) {
+        const { email } = user;
+        dto.email = email;
         return this.userService.updateProfile(dto)
     }
 
     @Get()
-    find() { 
+    find() {
         return this.userService.getAllUsers()
     }
 }
