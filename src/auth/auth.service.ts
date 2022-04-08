@@ -37,7 +37,7 @@ export class AuthService {
             throw new HttpException('email already used', HttpStatus.BAD_REQUEST)
         }
         const hash = await this.sanitizedPassword(dto.password);
-        const newUser = await this.repo.create({ email: dto.email, password: hash });
+        const newUser = await this.repo.create({ email: dto.email, password: hash, fullName: dto.fullName });
         return this.signInToken(newUser._id, newUser.email);
     }
 
